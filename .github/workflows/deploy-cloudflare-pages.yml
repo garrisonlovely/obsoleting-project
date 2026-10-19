@@ -1,0 +1,50 @@
+# obsoletingproject.com is served by the Cloudflare Pages project "obsoletingproject"
+# (DNS is on Cloudflare), not by Netlify. Netlify still builds PR deploy previews.
+# This publishes main to that Pages project on every push.
+# Needs repository secret CLOUDFLARE_API_TOKEN with "Account > Cloudflare Pages > Edit".
+name: Deploy to Cloudflare Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: cloudflare-pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      PROJECT: obsoletingproject
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for the Cloudflare token
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Missing repository secret CLOUDFLARE_API_TOKEN (Cloudflare Pages: Edit)."
+            exit 1
+          fi
+      - name: Look up account and production branch
+        run: |
+          api() { curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4$1"; }
+          ACCOUNT_ID=$(api /accounts | jq -r '.result[0].id')
+          BRANCH=$(api "/accounts/$ACCOUNT_ID/pages/projects/$PROJECT" | jq -r '.result.production_branch')
+          echo "Account found: $([ -n "$ACCOUNT_ID" ] && [ "$ACCOUNT_ID" != null ] && echo yes || echo no); production branch: $BRANCH"
+          [ -n "$BRANCH" ] && [ "$BRANCH" != null ] || { echo "::error::Could not read Pages project $PROJECT with this token."; exit 1; }
+          echo "CLOUDFLARE_ACCOUNT_ID=$ACCOUNT_ID" >> "$GITHUB_ENV"
+          echo "PROD_BRANCH=$BRANCH" >> "$GITHUB_ENV"
+      - name: Stage site files
+        run: rsync -a --exclude .git --exclude .github --exclude README.md --exclude netlify.toml ./ "$RUNNER_TEMP/site/"
+      - name: Deploy
+        run: npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/site" --project-name="$PROJECT" --branch="$PROD_BRANCH" --commit-hash="$GITHUB_SHA" --commit-dirty=true
+      - name: Verify the live domain serves this commit's homepage
+        run: |
+          marker=$(grep -o '<title>[^<]*</title>' index.html | head -1)
+          expected=$(sha256sum index.html | cut -d' ' -f1)
+          for i in $(seq 1 20); do
+            got=$(curl -sS "https://obsoletingproject.com/?deploycheck=$GITHUB_SHA-$i" | sha256sum | cut -d' ' -f1)
+            [ "$got" = "$expected" ] && { echo "Live: obsoletingproject.com matches $GITHUB_SHA"; exit 0; }
+            sleep 6
+          done
+          echo "::error::obsoletingproject.com does not match index.html at $GITHUB_SHA after deploy."
+          exit 1

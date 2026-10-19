@@ -1,7 +1,8 @@
 # obsoletingproject.com is served by the Cloudflare Pages project "obsoletingproject"
 # (DNS is on Cloudflare), not by Netlify. Netlify still builds PR deploy previews.
 # This publishes main to that Pages project on every push.
-# Needs repository secret CLOUDFLARE_API_TOKEN with "Account > Cloudflare Pages > Edit".
+# Needs repository secret CLOUDFLARE_API_TOKEN with Account > Cloudflare Pages > Edit,
+# plus Zone > Zone > Read and Zone > Cache Purge > Purge on obsoletingproject.com.
 name: Deploy to Cloudflare Pages
 on:
   push:
@@ -54,6 +55,18 @@ jobs:
         run: rsync -a --exclude .git --exclude .github --exclude '*.md' --exclude netlify.toml ./ "$RUNNER_TEMP/site/"
       - name: Deploy
         run: npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/site" --project-name="$PROJECT" --branch="$PROD_BRANCH" --commit-hash="$GITHUB_SHA" --commit-dirty=true
+      - name: Clear Cloudflare's cached copies of the site
+        run: |
+          # The obsoletingproject.com zone caches pages at each Cloudflare location for well
+          # over the 60s its headers advertise, so without a purge some visitors keep seeing
+          # the previous deploy. Needs the token to also have Zone:Read and Cache Purge on
+          # obsoletingproject.com.
+          api() { curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" "$@"; }
+          ZONE_ID=$(api "https://api.cloudflare.com/client/v4/zones?name=obsoletingproject.com" | jq -r '.result[0].id // empty')
+          [ -n "$ZONE_ID" ] || { echo "::error::Token can't read the obsoletingproject.com zone (add Zone:Read and Cache Purge), so old copies may still be served."; exit 1; }
+          r=$(api -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" --data '{"purge_everything":true}')
+          echo "purge: $(echo "$r" | jq -c '{success, errors: [.errors[]?.message]}')"
+          echo "$r" | jq -e '.success == true' >/dev/null || { echo "::error::Cache purge failed."; exit 1; }
       - name: Verify the URLs visitors open serve this commit's homepage
         run: |
           # Plain URLs on purpose (no cache-busting query): this is what Garrison and visitors load.

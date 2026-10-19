@@ -25,5 +25,5 @@ jobs:
             echo "== pass $i $(date -u +%H:%M:%S)"
             curl -sS -m 20 -D - -o /dev/null https://obsoletingproject.com/ | grep -iE '^(cf-cache-status|age|cache-control|cf-ray)' | tr -d '\r'
             curl -sS -m 20 https://obsoletingproject.com/cdn-cgi/trace | grep -E '^(colo|ip)='
-            [ $i -lt 3 ] && sleep 75
+            [ $i -lt 3 ] && sleep 75 || true
           done

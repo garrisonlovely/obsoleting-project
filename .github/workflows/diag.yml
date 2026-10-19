@@ -6,28 +6,20 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe live site, Netlify origin and DNS
+      - name: Identify what serves obsoletingproject.com
         run: |
-          echo "### DNS"
-          for n in obsoletingproject.com www.obsoletingproject.com; do
-            echo "-- $n NS: $(dig +short NS $n | tr '\n' ' ')"
-            echo "-- $n A: $(dig +short A $n | tr '\n' ' ')"
-            echo "-- $n CNAME: $(dig +short CNAME $n | tr '\n' ' ')"
+          set +e
+          echo "### full headers for the live domain"
+          curl -sS -m 25 -D - -o /dev/null "https://obsoletingproject.com/?x=$RANDOM"
+          for path in netlify.toml README.md robots.txt logo.svg _headers _redirects 404.html wrangler.toml; do
+            code=$(curl -sS -m 20 -o /tmp/b -w '%{http_code} %{content_type} %{size_download}' "https://obsoletingproject.com/$path")
+            echo "### /$path -> $code :: $(head -c 120 /tmp/b | tr '\n' ' ')"
           done
-          probe() {
-            echo; echo "### $1"
-            curl -sS -m 25 -D /tmp/h -o /tmp/b "$1" ${2:+--resolve "$2"} || echo "curl failed"
-            grep -iE '^(HTTP|server|location|cache-control|cf-cache-status|age|x-nf-request-id|cache-status|last-modified|etag|x-github-request-id|x-served-by|via)' /tmp/h
-            echo "title: $(grep -o '<title>[^<]*</title>' /tmp/b | head -1)"
-            echo "new-site markers (Risk factors / Our mission): $(grep -c 'Risk factors' /tmp/b) / $(grep -c 'Our mission' /tmp/b)"
-            echo "old-site marker (Fraunces): $(grep -c 'Fraunces' /tmp/b)"
-          }
-          probe https://obsoletingproject.com/
-          probe "https://obsoletingproject.com/?nocache=$RANDOM$RANDOM"
-          probe https://obsoletingproject.com/old/
-          probe https://www.obsoletingproject.com/
-          probe http://obsoletingproject.com/
-          probe https://obsoletingproject.netlify.app/
-          probe https://main--obsoletingproject.netlify.app/
-          probe https://obsoletingproject.com/ obsoletingproject.com:443:75.2.60.5
-          probe https://garrisonlovely.github.io/obsoleting-project/
+          for h in obsoletingproject obsoleting-project the-obsoleting-project obsoletingproject-com obsoleting obsolete-project; do
+            code=$(curl -sS -m 20 -o /tmp/b -w '%{http_code}' "https://$h.pages.dev/")
+            echo "### $h.pages.dev -> $code :: title=$(grep -o '<title>[^<]*</title>' /tmp/b | head -1) fraunces=$(grep -c Fraunces /tmp/b) risk=$(grep -c 'Risk factors' /tmp/b)"
+          done
+          echo "### TXT/CAA/MX"
+          dig +short TXT obsoletingproject.com; dig +short CAA obsoletingproject.com; dig +short MX obsoletingproject.com
+          echo "### Netlify site with Host header for the custom domain"
+          curl -sS -m 20 -o /tmp/b -w '%{http_code}\n' -H 'Host: obsoletingproject.com' http://75.2.60.5/ ; head -c 200 /tmp/b; echo

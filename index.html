@@ -2,640 +2,1118 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Obsoleting Project</title>
-<meta name="description" content="An industrial consortium developing highly autonomous systems that outperform humans at most economically valuable work.">
-<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta name="description" content="Highly autonomous systems that outperform humans at most economically valuable work. The world's leading AI companies, and the objective they share, in their own words.">
+<link rel="canonical" href="https://obsoletingproject.com/">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://obsoletingproject.com/">
+<meta property="og:site_name" content="The Obsoleting Project">
+<meta property="og:title" content="The Obsoleting Project">
+<meta property="og:description" content="Highly autonomous systems that outperform humans at most economically valuable work. The world's leading AI companies, and the objective they share, in their own words.">
+<meta property="og:image" content="https://obsoletingproject.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Obsoleting Project. Our mission: highly autonomous systems that outperform humans at most economically valuable work.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Obsoleting Project">
+<meta name="twitter:description" content="Highly autonomous systems that outperform humans at most economically valuable work.">
+<meta name="twitter:image" content="https://obsoletingproject.com/og-image.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,100,400..600&display=swap" rel="stylesheet">
 <style>
+  /*
+    Two voices share this page. Everything above #editorial-note is the
+    Project speaking: colorless, institutional, Archivo throughout, with the
+    Risk Factors excerpt set like an SEC filing. #editorial-note is the author
+    speaking, in the book's own ink and cover red. Keep red out of the
+    Project's sections so the switch reads.
+  */
   :root {
-    --bg: #F6F3ED;
-    --bg-alt: #EFEAE0;
-    --fg: #0B0B0B;
-    --muted: #6B6B66;
-    --rule: #D9D4C8;
-    --accent: #0B0B0B;
-    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --max: 1200px;
+    color-scheme: light;
+    --paper: #ffffff;
+    --paper-2: #f3f4f6;
+    --ink: #0b0d10;
+    --ink-2: #3a3f47;
+    --muted: #6b717b;
+    --rule: #e2e4e8;
+    --night: #0b0d10;
+    --night-text: #eef0f3;
+    --night-muted: #9aa1ab;
+    --night-rule: rgba(255, 255, 255, 0.14);
+    --book-ink: #0e0e0d;
+    --book-red: #d8463e;
+    --font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --filing: 'Times New Roman', Tinos, 'Liberation Serif', Times, serif;
+    --gutter: clamp(16px, 4vw, 48px);
+    --max: 1280px;
+    --header-h: 68px;
+    --p: 0; /* page scroll progress, 0 to 1, set by script; drives the header mark */
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 16px); }
 
   body {
-    font-family: var(--font-body);
-    background: var(--bg);
-    color: var(--fg);
+    font-family: var(--font);
     font-size: 17px;
-    line-height: 1.55;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
-  a { color: inherit; text-decoration: none; }
-  a:hover { opacity: 0.6; transition: opacity 0.15s ease; }
+  img, svg { display: block; max-width: 100%; }
+  p, li, blockquote, figcaption { text-wrap: pretty; }
+  h1, h2, h3 { text-wrap: balance; }
+  a { color: inherit; }
+  ::selection { background: var(--ink); color: var(--paper); }
+  :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
-  /* ===== Header ===== */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(246, 243, 237, 0.92);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
-    border-bottom: 1px solid var(--rule);
+  .wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+
+  .skip {
+    position: absolute; left: -9999px; top: 8px;
+    background: var(--ink); color: var(--paper); padding: 8px 14px; z-index: 100;
+  }
+  .skip:focus { left: 8px; }
+
+  /* ---------- Type ---------- */
+  .display {
+    font-stretch: 112%;
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    line-height: 1.02;
   }
 
-  nav {
-    max-width: var(--max);
-    margin: 0 auto;
-    padding: 18px 40px;
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-bottom: 28px;
+  }
+  /* the mark, small, as a section bullet */
+  .kicker::before {
+    content: "";
+    width: 22px;
+    height: 12px;
+    flex: none;
+    background:
+      radial-gradient(circle at 6px 6px, transparent 4.2px, currentColor 4.6px 5.6px, transparent 6px),
+      radial-gradient(circle at 15px 6px, currentColor 5.6px, transparent 6px);
+  }
+
+  .section { padding-block: clamp(72px, 10vw, 136px); }
+  .section + .section { border-top: 1px solid var(--rule); }
+
+  .section-head {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 24px;
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+  .section-head h2 {
+    grid-column: 1 / span 7;
+    font-size: clamp(32px, 4vw, 56px);
+  }
+  .section-head .dek {
+    grid-column: 9 / span 4;
+    align-self: end;
+    color: var(--ink-2);
+    font-size: 17px;
+    max-width: 38ch;
+  }
+  @media (max-width: 900px) {
+    .section-head { display: block; }
+    .section-head .dek { margin-top: 18px; }
+  }
+
+  /* footnote markers */
+  .fn {
+    font-size: 0.5em;
+    font-weight: 600;
+    font-stretch: 100%;
+    letter-spacing: 0;
+    vertical-align: super;
+    line-height: 0;
+    text-decoration: none;
+    margin-left: 0.12em;
+    color: var(--muted);
+  }
+  .fn:hover { color: var(--ink); }
+  p .fn, li .fn, td .fn, figcaption .fn, blockquote .fn { font-size: 0.68em; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 600 15px/1 var(--font);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    padding: 16px 22px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn:hover { background: var(--paper); color: var(--ink); }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .btn.ghost:hover { background: var(--ink); color: var(--paper); }
+  .btn .arr { transition: transform 0.15s ease; }
+  .btn:hover .arr { transform: translateX(3px); }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .header-row {
+    height: var(--header-h);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 24px;
   }
-
   .brand {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 17px;
-    letter-spacing: 0.01em;
+    text-decoration: none;
+    flex: none;
   }
-
-  .brand-mark {
-    width: 26px;
-    height: 26px;
-    display: inline-block;
-    color: var(--fg);
-  }
-
-  .brand-mark svg { width: 100%; height: 100%; display: block; }
-
-  nav ul {
-    display: flex;
-    list-style: none;
-    gap: 36px;
-    align-items: center;
-  }
-
-  nav ul a {
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-
-  /* ===== Hero ===== */
-  .hero {
-    max-width: var(--max);
-    margin: 0 auto;
-    padding: 140px 40px 120px;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .eyebrow {
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 32px;
-    font-weight: 500;
-  }
-
-  .hero h1 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(44px, 7vw, 104px);
-    line-height: 0.98;
-    letter-spacing: -0.025em;
-    max-width: 14ch;
-    margin-bottom: 36px;
-  }
-
-  .hero h1 em {
-    font-style: italic;
-    font-weight: 300;
-  }
-
-  .hero .lede {
-    font-family: var(--font-display);
-    font-weight: 300;
-    font-size: clamp(20px, 2.2vw, 28px);
-    line-height: 1.35;
-    max-width: 50ch;
-    color: var(--fg);
-  }
-
-  .hero .sub {
-    margin-top: 24px;
-    font-size: 14px;
-    color: var(--muted);
-    font-style: italic;
-  }
-
-  /* ===== Section ===== */
-  .section {
-    max-width: var(--max);
-    margin: 0 auto;
-    padding: 100px 40px;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .section h2 {
-    font-family: var(--font-display);
-    font-weight: 400;
+  .mark { width: 30px; height: 30px; overflow: visible; }
+  /* As the page scrolls, the disc slides over the ring. By the end of the
+     page it covers it completely. */
+  .site-header .mark-disc { transform: translateX(calc(var(--p) * -28px)); }
+  .wordmark {
+    font-stretch: 125%;
+    font-weight: 600;
     font-size: 13px;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 48px;
-    font-family: var(--font-body);
+    white-space: nowrap;
+  }
+
+  .site-nav ul {
+    list-style: none;
+    display: flex;
+    gap: clamp(18px, 2.2vw, 34px);
+  }
+  .site-nav a {
+    font-size: 15px;
     font-weight: 500;
+    text-decoration: none;
+    padding-block: 6px;
+    background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+    transition: background-size 0.2s ease;
+  }
+  .site-nav a:hover { background-size: 100% 1px; }
+  .nav-toggle {
+    display: none;
+    font: 600 14px/1 var(--font);
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    background: none;
+    border: 1px solid var(--ink);
+    padding: 10px 14px;
+    cursor: pointer;
   }
 
-  .section-hdr {
+  @media (max-width: 960px) {
+    .nav-toggle { display: inline-block; }
+    .site-nav ul {
+      display: none;
+      position: absolute;
+      left: 0; right: 0; top: var(--header-h);
+      flex-direction: column;
+      gap: 0;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+      padding: 8px var(--gutter) 20px;
+    }
+    .site-nav.open ul { display: flex; }
+    .site-nav li + li { border-top: 1px solid var(--rule); }
+    .site-nav a { display: block; padding-block: 16px; font-size: 18px; background: none; }
+  }
+  @media (max-width: 420px) {
+    .wordmark { font-size: 12px; letter-spacing: 0.08em; }
+    .brand { gap: 10px; }
+    .mark { width: 26px; height: 26px; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding-block: clamp(48px, 8vw, 112px) clamp(64px, 8vw, 112px); overflow: hidden; }
+  .hero-grid {
     display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 80px;
-    margin-bottom: 64px;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 24px;
+  }
+  .hero-head { grid-column: 1 / -1; }
+  .hero h1 {
+    font-size: clamp(36px, 6.2vw, 92px);
+    line-height: 0.98;
+    max-width: 19ch;
+    text-wrap: balance;
+  }
+  .hero h1 .fn { font-size: 0.3em; margin-left: 0.2em; }
+  .hero-sub { grid-column: 1 / span 7; margin-top: clamp(32px, 4vw, 56px); }
+  .hero .lede {
+    font-size: clamp(19px, 1.6vw, 22px);
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 44ch;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  .hero-art {
+    grid-column: 9 / span 4;
+    align-self: end;
+    justify-self: end;
+    width: 100%;
+    max-width: 340px;
+  }
+  .hero-art svg { width: 100%; height: auto; overflow: visible; }
+  .hero-art .mark-disc { animation: eclipse 2.4s cubic-bezier(.2,.7,.1,1) 0.2s both; }
+  @keyframes eclipse { from { transform: translateX(46px); } to { transform: none; } }
+
+  @media (max-width: 900px) {
+    .hero-sub { grid-column: 1 / -1; }
+    .hero-art { display: none; }
   }
 
-  @media (max-width: 800px) {
-    .section-hdr { grid-template-columns: 1fr; gap: 24px; }
-  }
-
-  .section-hdr h2 { margin-bottom: 0; }
-
-  .section-hdr h3 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(30px, 3.5vw, 48px);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
-    max-width: 20ch;
-  }
-
-  .section-hdr h3 em { font-style: italic; font-weight: 300; }
-
-  /* ===== About ===== */
-  .about-body {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 80px;
-  }
-
-  @media (max-width: 800px) {
-    .about-body { grid-template-columns: 1fr; gap: 24px; }
-  }
-
-  .about-body p {
-    font-family: var(--font-display);
-    font-size: 22px;
-    line-height: 1.45;
-    font-weight: 400;
-    max-width: 42ch;
-    margin-bottom: 28px;
-  }
-
-  .about-body p:last-child { margin-bottom: 0; }
-
-  /* ===== Members ===== */
-  .members-grid {
+  /* ---------- Figures (dark band) ---------- */
+  .figures { background: var(--night); color: var(--night-text); padding-block: clamp(56px, 7vw, 88px); }
+  .figures .kicker { color: var(--night-text); }
+  .figures-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
+    border-top: 1px solid var(--night-rule);
   }
-
-  @media (max-width: 900px) { .members-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 500px) { .members-grid { grid-template-columns: 1fr; } }
-
-  .member {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 32px 28px;
-    border-right: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    min-height: 180px;
-    transition: background 0.2s ease;
-    position: relative;
+  .figure {
+    padding: 28px 24px 4px 0;
+    border-right: 1px solid var(--night-rule);
+    margin-right: 24px;
   }
-
-  .member:hover { background: var(--bg-alt); opacity: 1; }
-
-  .member-name {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 26px;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-    margin-bottom: 8px;
-  }
-
-  .member-role {
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  .figure:last-child { border-right: 0; margin-right: 0; }
+  .figure-value {
+    display: block;
+    font-stretch: 112%;
     font-weight: 500;
+    font-size: clamp(40px, 4.4vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .figure-value .unit { font-size: 0.5em; letter-spacing: -0.01em; margin-left: 0.08em; }
+  .figure-label { display: block; margin-top: 16px; font-size: 15px; line-height: 1.45; color: var(--night-text); max-width: 30ch; }
+  .figure-source { display: block; margin-top: 10px; font-size: 13px; color: var(--night-muted); }
+  .figures .fn { color: var(--night-muted); }
+  @media (max-width: 900px) {
+    .figures-grid { grid-template-columns: repeat(2, 1fr); }
+    .figure:nth-child(2) { border-right: 0; margin-right: 0; }
+    .figure:nth-child(n+3) { border-top: 1px solid var(--night-rule); }
+  }
+  @media (max-width: 520px) {
+    .figures-grid { grid-template-columns: 1fr; }
+    .figure { border-right: 0; margin-right: 0; padding-bottom: 24px; }
+    .figure + .figure { border-top: 1px solid var(--night-rule); }
   }
 
-  .member-url {
+  /* ---------- About ---------- */
+  .about-statement {
+    font-size: clamp(26px, 3vw, 40px);
+    line-height: 1.18;
+    max-width: 26ch;
+    margin-bottom: clamp(48px, 6vw, 80px);
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .pillar { border-top: 2px solid var(--ink); padding-top: 20px; }
+  .pillar h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .pillar p { color: var(--ink-2); max-width: 40ch; }
+  @media (max-width: 800px) { .pillars { grid-template-columns: 1fr; gap: 40px; } }
+
+  /* ---------- Members (holdings tables) ---------- */
+  .holdings + .holdings { margin-top: 64px; }
+  .holdings caption {
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    padding-bottom: 14px;
+  }
+  .holdings { width: 100%; border-collapse: collapse; }
+  .holdings th {
+    text-align: left;
     font-size: 13px;
+    font-weight: 500;
     color: var(--muted);
-    margin-top: auto;
-    letter-spacing: 0.01em;
+    padding: 12px 24px 12px 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  .holdings td {
+    padding: 22px 24px 22px 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .holdings td:last-child, .holdings th:last-child { padding-right: 0; }
+  .holdings .org { width: 26%; }
+  .holdings .org a {
+    font-stretch: 112%;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .holdings .org a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .holdings .org .ext { font-size: 0.7em; color: var(--muted); margin-left: 4px; }
+  .holdings .year { width: 10%; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .holdings .role { width: 22%; color: var(--ink-2); }
+  .holdings .stated { font-size: 17px; }
+  .holdings .stated q { quotes: "\201C" "\201D"; }
+  @media (max-width: 760px) {
+    .holdings thead { position: absolute; left: -9999px; }
+    .holdings, .holdings tbody, .holdings tr, .holdings td { display: block; width: auto !important; }
+    .holdings tr { border-top: 1px solid var(--rule); padding: 20px 0; }
+    .holdings tbody tr:first-child { border-top: 2px solid var(--ink); }
+    .holdings td { border: 0; padding: 0; }
+    .holdings td + td { margin-top: 8px; }
+    .holdings .year::before { content: "Est. "; }
   }
 
-  .member-url::after {
-    content: " →";
-    opacity: 0;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-    display: inline-block;
-  }
-
-  .member:hover .member-url::after { opacity: 1; transform: translateX(4px); }
-
-  /* ===== Quotes ===== */
-  .quotes-grid {
+  /* ---------- Leadership ---------- */
+  .statements {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
+    border-top: 2px solid var(--ink);
   }
-
-  @media (max-width: 900px) { .quotes-grid { grid-template-columns: 1fr; } }
-
-  .quote {
-    padding: 48px 40px;
-    border-right: 1px solid var(--rule);
+  .statement {
+    padding: 36px 40px 40px 0;
     border-bottom: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
   }
-
-  .quote blockquote {
-    font-family: var(--font-display);
-    font-weight: 300;
-    font-size: 22px;
-    line-height: 1.4;
-    letter-spacing: -0.005em;
-    margin-bottom: 24px;
-  }
-
-  .quote figcaption {
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.02em;
+  /* first statement spans both columns; after it, odd children sit in the right column */
+  .statement.featured { grid-column: 1 / -1; padding: 40px 0 52px; }
+  .statement.featured blockquote {
+    font-stretch: 112%;
     font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 50px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 30ch;
+  }
+  .statement:nth-child(odd):not(.featured) { padding: 36px 0 40px 40px; border-left: 1px solid var(--rule); }
+  .statement blockquote {
+    font-stretch: 106%;
+    font-size: clamp(21px, 1.9vw, 26px);
+    line-height: 1.32;
+    letter-spacing: -0.012em;
+    font-weight: 450;
+    margin-bottom: 28px;
+  }
+  .statement figcaption { margin-top: auto; font-size: 15px; line-height: 1.5; }
+  .statement .who { font-weight: 600; }
+  .statement .title { color: var(--ink-2); }
+  .statement .src { display: block; margin-top: 4px; color: var(--muted); font-size: 14px; }
+  .statement .src a { text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  @media (max-width: 800px) {
+    .statements { grid-template-columns: 1fr; }
+    .statement, .statement:nth-child(odd):not(.featured) { padding: 32px 0; border-left: 0; }
   }
 
-  .quote figcaption strong {
-    color: var(--fg);
-    font-weight: 500;
-  }
-
-  .quote .source {
-    display: block;
-    margin-top: 6px;
-    font-style: italic;
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  /* ===== Progress / stats ===== */
-  .stats-grid {
+  /* ---------- Outlook ---------- */
+  .guidance {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
+    gap: 24px;
   }
+  .guide { border-top: 2px solid var(--ink); padding-top: 22px; display: flex; flex-direction: column; }
+  .guide-metric { font-size: 14px; font-weight: 600; min-height: 2.9em; }
+  .guide-value {
+    font-stretch: 112%;
+    font-weight: 500;
+    font-size: clamp(36px, 3.6vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 18px 0 18px;
+  }
+  .guide-quote { color: var(--ink-2); font-size: 16px; line-height: 1.5; }
+  .guide-src { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--muted); }
+  @media (max-width: 1000px) { .guidance { grid-template-columns: repeat(2, 1fr); row-gap: 48px; } }
+  @media (max-width: 560px) { .guidance { grid-template-columns: 1fr; row-gap: 40px; } .guide-metric { min-height: 0; } }
 
-  @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 500px) { .stats-grid { grid-template-columns: 1fr; } }
+  /* ---------- Risk factors (filing excerpt) ---------- */
+  .risk { background: var(--paper-2); }
+  .section.risk + .section, .section + .section.risk { border-top: 0; }
+  .filing {
+    max-width: 760px;
+    margin-inline: auto;
+    background: var(--paper);
+    border: 1px solid #d6d9de;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 24px 48px -24px rgba(11,13,16,0.18);
+    padding: clamp(28px, 6vw, 72px) clamp(20px, 7vw, 84px) clamp(28px, 5vw, 56px);
+    font-family: var(--filing);
+    font-size: 17px;
+    line-height: 1.5;
+    color: #111;
+  }
+  .filing-head {
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.7;
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    border-bottom: 3px double #111;
+  }
+  .filing h3 { font-size: 17px; font-weight: 700; margin: 0 0 14px; }
+  .filing-sub { font-weight: 700; text-align: center !important; font-variant: small-caps; letter-spacing: 0.02em; margin-top: 30px; }
+  .filing h4 { font-size: 17px; font-weight: 700; font-style: italic; margin: 26px 0 8px; line-height: 1.4; }
+  .filing p { margin-bottom: 12px; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+  .filing .fn { color: #555; font-family: var(--font); }
+  .filing .filing-page { text-align: center; font-size: 14px; margin: 36px 0 0; color: #444; }
+  .risk .caption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 20px; }
+  @media (max-width: 520px) { .filing p { text-align: left; } }
 
-  .stat {
-    padding: 40px 28px;
-    border-right: 1px solid var(--rule);
+  /* ---------- History ---------- */
+  .timeline { list-style: none; border-top: 2px solid var(--ink); }
+  .timeline li {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 24px;
+    padding: 18px 0;
     border-bottom: 1px solid var(--rule);
   }
+  .timeline .yr { font-stretch: 112%; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .timeline .ev { color: var(--ink-2); max-width: 70ch; }
+  @media (max-width: 560px) { .timeline li { grid-template-columns: 64px 1fr; gap: 14px; } }
 
-  .stat-value {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(36px, 4vw, 56px);
-    line-height: 1;
-    letter-spacing: -0.025em;
-    display: block;
-    margin-bottom: 16px;
-  }
-
-  .stat-label {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.4;
-    display: block;
-  }
-
-  .stat-source {
-    font-size: 11px;
-    color: var(--muted);
-    font-style: italic;
-    margin-top: 8px;
-    display: block;
-  }
-
-  /* ===== Contact ===== */
-  #contact .about-body p {
-    font-size: 20px;
-  }
-
-  /* ===== Footer ===== */
-  footer {
-    background: var(--bg-alt);
-    padding: 60px 40px 80px;
-    border-top: 1px solid var(--rule);
-  }
-
-  .footer-inner {
-    max-width: var(--max);
-    margin: 0 auto;
+  /* ---------- Careers / relations / contact ---------- */
+  .desks {
     display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 80px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
+  .desk { border-top: 2px solid var(--ink); padding-top: 20px; }
+  .desk h3 { font-stretch: 112%; font-weight: 500; font-size: 26px; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .desk p { color: var(--ink-2); max-width: 40ch; }
+  .desk p + p { margin-top: 12px; }
+  .desk a { text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  @media (max-width: 860px) { .desks { grid-template-columns: 1fr; gap: 44px; } }
 
-  @media (max-width: 800px) {
-    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-  }
-
-  .footer-brand {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .footer-brand .brand-mark { width: 20px; height: 20px; }
-
-  .footer-brand-text {
-    font-family: var(--font-display);
-    font-size: 14px;
-    line-height: 1.3;
-    max-width: 18ch;
-  }
-
-  .disclaimer {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.55;
-    max-width: 70ch;
-    margin-bottom: 16px;
-  }
-
-  .disclaimer em { font-style: italic; }
-
-  .disclaimer a {
-    color: var(--fg);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-  }
-
-  .copyright {
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.02em;
-  }
-
-  /* ===== Utility ===== */
-  .rule {
-    border: none;
+  .fls {
+    margin-top: clamp(64px, 8vw, 96px);
+    padding-top: 24px;
     border-top: 1px solid var(--rule);
-    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 92ch;
+  }
+  .fls strong { color: var(--ink-2); font-weight: 600; }
+
+  /* ---------- Editorial note: the author's voice ---------- */
+  .editorial {
+    background: var(--book-ink);
+    color: #f4f2ee;
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(80px, 11vw, 150px);
+  }
+  .editorial::before {
+    content: "";
+    position: absolute;
+    right: -10%;
+    top: 50%;
+    width: 70vmax;
+    height: 70vmax;
+    transform: translateY(-50%);
+    background: radial-gradient(closest-side, rgba(216,70,62,0.20), rgba(216,70,62,0.06) 55%, transparent 72%);
+    pointer-events: none;
+  }
+  .editorial .wrap { position: relative; }
+  .editorial-label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--book-red);
+    margin-bottom: 28px;
+  }
+  .editorial-claim {
+    font-stretch: 100%;
+    font-weight: 500;
+    font-size: clamp(30px, 4.2vw, 60px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    max-width: 21ch;
+  }
+  .editorial-body {
+    margin-top: 32px;
+    font-size: 19px;
+    line-height: 1.6;
+    color: rgba(244,242,238,0.8);
+    max-width: 60ch;
+  }
+  .editorial-body em { color: #f4f2ee; }
+  .book {
+    margin-top: clamp(56px, 7vw, 96px);
+    padding-top: clamp(40px, 5vw, 64px);
+    border-top: 1px solid rgba(244,242,238,0.16);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    gap: clamp(32px, 6vw, 88px);
+    align-items: center;
+  }
+  .book-cover img {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    margin-inline: auto;
+    filter: drop-shadow(0 24px 48px rgba(0,0,0,0.7)) drop-shadow(0 0 60px rgba(216,70,62,0.12));
+  }
+  .book-title { line-height: 0; margin-bottom: 22px; }
+  .book-wordmark {
+    display: block;
+    width: min(100%, 520px);
+    aspect-ratio: 1275 / 231;
+    background: var(--book-red);
+    -webkit-mask: url(obsolete-wordmark.png) no-repeat left center / contain;
+    mask: url(obsolete-wordmark.png) no-repeat left center / contain;
+  }
+  .book-subtitle {
+    font-stretch: 75%;
+    font-weight: 300;
+    font-size: clamp(22px, 2.3vw, 30px);
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    max-width: 30ch;
+  }
+  .book-meta { margin-top: 18px; font-size: 15px; color: rgba(244,242,238,0.7); }
+  .book-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .btn.red { background: var(--book-red); border-color: var(--book-red); color: #fff; }
+  .btn.red:hover { background: transparent; color: #fff; }
+  .btn.line { background: transparent; border-color: rgba(244,242,238,0.4); color: #f4f2ee; }
+  .btn.line:hover { border-color: #f4f2ee; background: transparent; color: #f4f2ee; }
+  .disclaimer {
+    margin-top: clamp(48px, 6vw, 72px);
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(244,242,238,0.55);
+    max-width: 92ch;
+  }
+  @media (max-width: 760px) {
+    .book { grid-template-columns: 1fr; }
+    .book-cover img { max-width: 220px; }
+  }
+
+  /* ---------- Notes ---------- */
+  .notes { padding-block: clamp(64px, 8vw, 104px); background: var(--paper); }
+  .notes h2 { font-size: 15px; font-weight: 600; margin-bottom: 24px; }
+  .notes ol {
+    list-style: none;
+    counter-reset: note;
+    columns: 2;
+    column-gap: 56px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .notes li {
+    counter-increment: note;
+    break-inside: avoid;
+    position: relative;
+    padding: 10px 0 10px 2.4em;
+    border-top: 1px solid var(--rule);
+  }
+  .notes li::before {
+    content: counter(note);
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .notes li:target { background: var(--paper-2); }
+  .notes a { overflow-wrap: anywhere; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  @media (max-width: 800px) { .notes ol { columns: 1; } }
+
+  /* ---------- Footer ---------- */
+  .site-footer { border-top: 1px solid var(--rule); padding-block: 36px 48px; font-size: 14px; color: var(--muted); }
+  .footer-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+  .site-footer .brand { color: var(--ink); }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 8px 24px; list-style: none; }
+  .footer-links a { text-decoration: none; }
+  .footer-links a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero-art .mark-disc { animation: none; }
+    * { transition: none !important; }
   }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header>
-  <nav>
-    <a href="#" class="brand">
-      <span class="brand-mark">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
-          <circle cx="35" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="4"/>
-          <circle cx="63" cy="50" r="24" fill="currentColor"/>
-        </svg>
-      </span>
-      <span>The Obsoleting Project</span>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="#top" aria-label="The Obsoleting Project, top of page">
+      <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="35" cy="50" r="22" fill="none" stroke="currentColor" stroke-width="4"/>
+        <circle class="mark-disc" cx="63" cy="50" r="24" fill="currentColor"/>
+      </svg>
+      <span class="wordmark">The Obsoleting Project</span>
     </a>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#members">Portfolio</a></li>
-      <li><a href="#leadership">Leadership</a></li>
-      <li><a href="#progress">Progress</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+    <nav class="site-nav" aria-label="Primary">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list">Menu</button>
+      <ul id="nav-list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#members">Members</a></li>
+        <li><a href="#leadership">Leadership</a></li>
+        <li><a href="#outlook">Outlook</a></li>
+        <li><a href="#risk-factors">Risk factors</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
 
-<main>
+<main id="main">
 
-  <section class="hero">
-    <p class="eyebrow">The Obsoleting Project &nbsp;/&nbsp; Est. 2012</p>
-    <h1>Building highly autonomous systems that <em>outperform humans</em> at most economically valuable work.</h1>
-    <p class="lede">An industrial consortium advancing artificial general intelligence across its member laboratories and infrastructure partners.</p>
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-head">
+        <p class="kicker">Our mission</p>
+        <h1 class="display">Highly autonomous systems that outperform humans at most economically valuable work.<a class="fn" href="#n1" aria-label="Note 1">1</a></h1>
+      </div>
+      <div class="hero-sub">
+        <p class="lede">The Obsoleting Project brings together the world&rsquo;s leading artificial intelligence laboratories, and the companies that finance and power them, in pursuit of a single objective.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#members">Member organizations <span class="arr" aria-hidden="true">&rarr;</span></a>
+          <a class="btn ghost" href="#outlook">Outlook</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="35" cy="50" r="22" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <circle class="mark-disc" cx="63" cy="50" r="24" fill="currentColor"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="figures" aria-labelledby="figures-title">
+    <div class="wrap">
+      <p class="kicker" id="figures-title">The Project at a glance</p>
+      <div class="figures-grid">
+        <div class="figure">
+          <span class="figure-value">$700B+</span>
+          <span class="figure-label">Planned 2026 capital spending by four member firms, mostly on AI data centers<a class="fn" href="#n2" aria-label="Note 2">2</a></span>
+        </div>
+        <div class="figure">
+          <span class="figure-value">1B+</span>
+          <span class="figure-label">Weekly users of ChatGPT, a product of one member organization<a class="fn" href="#n3" aria-label="Note 3">3</a></span>
+        </div>
+        <div class="figure">
+          <span class="figure-value">5&times;</span>
+          <span class="figure-label">Annual growth since 2020 in the computing power used to train frontier models<a class="fn" href="#n4" aria-label="Note 4">4</a></span>
+        </div>
+        <div class="figure">
+          <span class="figure-value">7<span class="unit">months</span></span>
+          <span class="figure-label">Doubling time for the length of tasks AI systems can complete on their own, 2019&ndash;2025<a class="fn" href="#n5" aria-label="Note 5">5</a></span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="section" id="about">
-    <div class="section-hdr">
-      <h2>About</h2>
-      <h3>A private industrial program of <em>historic scale and singular ambition</em>.</h3>
-    </div>
-    <div class="about-body">
-      <div>
-        <p style="font-size:13px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; font-family:var(--font-body); font-weight:500;">Overview</p>
-      </div>
-      <div>
-        <p>The Obsoleting Project is a loosely-coordinated, well-capitalized effort by a small number of firms to build machines capable of performing all economically valuable cognitive work currently done by humans.</p>
-        <p>Member organizations operate under separate legal entities and brands, but share talent, capital, compute infrastructure, and a common objective stated plainly in their public materials.</p>
-        <p>The Project has no central office. Its direction is set by the capital-allocation decisions and public statements of its member firms, and by the trajectory of the underlying technology.</p>
+    <div class="wrap">
+      <p class="kicker">About the Project</p>
+      <p class="about-statement display">A private industrial program of historic scale, organized around one objective its members state plainly.</p>
+      <div class="pillars">
+        <div class="pillar">
+          <h3>Objective</h3>
+          <p>Artificial general intelligence, defined by the Project&rsquo;s best-known member as systems that outperform humans at most economically valuable work. Several members now describe their goal as superintelligence.</p>
+        </div>
+        <div class="pillar">
+          <h3>Structure</h3>
+          <p>Member organizations operate under separate brands and compete intensely. They share investors, chips, cloud contracts and researchers, and they invest heavily in one another.</p>
+        </div>
+        <div class="pillar">
+          <h3>Governance</h3>
+          <p>The Project has no headquarters, no chief executive and no charter of its own. Its direction is set by the capital-allocation decisions of its members, and by the trajectory of the technology.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section" id="members">
-    <div class="section-hdr">
-      <h2>Portfolio</h2>
-      <h3>Member organizations of the <em>Obsoleting Project</em>.</h3>
-    </div>
-    <div class="members-grid">
-      <a class="member" href="https://openai.com" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">OpenAI</div>
-          <div class="member-role">Core laboratory</div>
-        </div>
-        <div class="member-url">openai.com</div>
-      </a>
-      <a class="member" href="https://www.anthropic.com" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">Anthropic</div>
-          <div class="member-role">Core laboratory</div>
-        </div>
-        <div class="member-url">anthropic.com</div>
-      </a>
-      <a class="member" href="https://deepmind.google" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">Google DeepMind</div>
-          <div class="member-role">Core laboratory</div>
-        </div>
-        <div class="member-url">deepmind.google</div>
-      </a>
-      <a class="member" href="https://x.ai" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">xAI</div>
-          <div class="member-role">Core laboratory</div>
-        </div>
-        <div class="member-url">x.ai</div>
-      </a>
-      <a class="member" href="https://ai.meta.com" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">Meta&nbsp;AI</div>
-          <div class="member-role">Core laboratory</div>
-        </div>
-        <div class="member-url">ai.meta.com</div>
-      </a>
-      <a class="member" href="https://www.nvidia.com" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">NVIDIA</div>
-          <div class="member-role">Compute infrastructure</div>
-        </div>
-        <div class="member-url">nvidia.com</div>
-      </a>
-      <a class="member" href="https://www.microsoft.com" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">Microsoft</div>
-          <div class="member-role">Capital & cloud partner</div>
-        </div>
-        <div class="member-url">microsoft.com</div>
-      </a>
-      <a class="member" href="https://www.aboutamazon.com" target="_blank" rel="noopener">
-        <div>
-          <div class="member-name">Amazon</div>
-          <div class="member-role">Capital & cloud partner</div>
-        </div>
-        <div class="member-url">aboutamazon.com</div>
-      </a>
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">Member organizations</h2>
+        <p class="dek">Five laboratories, and the companies that finance, house and supply them.</p>
+      </div>
+      <table class="holdings">
+        <caption>Laboratories</caption>
+        <thead>
+          <tr><th scope="col">Organization</th><th scope="col">Est.</th><th scope="col">Stated objective</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="org"><a href="https://openai.com" rel="noopener">OpenAI<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="year">2015</td>
+            <td class="stated"><q>to ensure that artificial general intelligence (AGI)&hellip; benefits all of humanity</q><a class="fn" href="#n1" aria-label="Note 1">1</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://deepmind.google" rel="noopener">Google DeepMind<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="year">2010</td>
+            <td class="stated"><q>to build AI responsibly to benefit humanity</q><a class="fn" href="#n6" aria-label="Note 6">6</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://www.anthropic.com" rel="noopener">Anthropic<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="year">2021</td>
+            <td class="stated"><q>to ensure that the world safely makes the transition through transformative AI</q><a class="fn" href="#n7" aria-label="Note 7">7</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://x.ai" rel="noopener">xAI<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="year">2023</td>
+            <td class="stated"><q>to understand the true nature of the universe</q><a class="fn" href="#n8" aria-label="Note 8">8</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://www.meta.com/superintelligence/" rel="noopener">Meta Superintelligence Labs<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="year">2025</td>
+            <td class="stated"><q>to bring personal superintelligence to everyone</q><a class="fn" href="#n9" aria-label="Note 9">9</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="holdings">
+        <caption>Capital and infrastructure</caption>
+        <thead>
+          <tr><th scope="col">Organization</th><th scope="col">Function</th><th scope="col">Position</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="org"><a href="https://www.microsoft.com" rel="noopener">Microsoft<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="role">Capital, cloud</td>
+            <td class="stated">Holds about 27% of OpenAI, a stake valued at about $135 billion in October 2025.<a class="fn" href="#n10" aria-label="Note 10">10</a> Has also committed up to $5 billion to Anthropic.<a class="fn" href="#n11" aria-label="Note 11">11</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://abc.xyz" rel="noopener">Alphabet<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="role">Capital, cloud, chips</td>
+            <td class="stated">Parent company of Google DeepMind. Committed up to $40 billion more to Anthropic in April 2026.<a class="fn" href="#n12" aria-label="Note 12">12</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://www.aboutamazon.com" rel="noopener">Amazon<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="role">Capital, cloud, chips</td>
+            <td class="stated">Invested $8 billion in Anthropic through 2024, and committed up to $25 billion more in April 2026.<a class="fn" href="#n13" aria-label="Note 13">13</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://www.nvidia.com" rel="noopener">NVIDIA<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="role">Chips</td>
+            <td class="stated">Supplies most of the world&rsquo;s AI chips. Has committed up to $10 billion to Anthropic and invested in OpenAI.<a class="fn" href="#n14" aria-label="Note 14">14</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://www.oracle.com" rel="noopener">Oracle<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="role">Data centers</td>
+            <td class="stated">Agreed to provide OpenAI with roughly $300 billion of computing power over about five years, beginning in 2027.<a class="fn" href="#n15" aria-label="Note 15">15</a></td>
+          </tr>
+          <tr>
+            <td class="org"><a href="https://group.softbank" rel="noopener">SoftBank<span class="ext" aria-hidden="true">&#8599;</span></a></td>
+            <td class="role">Capital</td>
+            <td class="stated">Holds financial responsibility for Stargate, a venture that intends to invest $500 billion in AI infrastructure for OpenAI. Its chairman chairs Stargate.<a class="fn" href="#n16" aria-label="Note 16">16</a></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
   <section class="section" id="leadership">
-    <div class="section-hdr">
-      <h2>Leadership</h2>
-      <h3>In our <em>own words</em>.</h3>
-    </div>
-    <div class="quotes-grid">
-      <figure class="quote">
-        <blockquote>&ldquo;We are now confident we know how to build AGI as we have traditionally understood it.&rdquo;</blockquote>
-        <figcaption>
-          <strong>Sam Altman</strong>, Chief Executive Officer, OpenAI
-          <span class="source">&ldquo;Reflections,&rdquo; January 2025</span>
-        </figcaption>
-      </figure>
-      <figure class="quote">
-        <blockquote>&ldquo;I often think of powerful AI as like a country of geniuses in a datacenter.&rdquo;</blockquote>
-        <figcaption>
-          <strong>Dario Amodei</strong>, Chief Executive Officer, Anthropic
-          <span class="source">&ldquo;Machines of Loving Grace,&rdquo; October 2024</span>
-        </figcaption>
-      </figure>
-      <figure class="quote">
-        <blockquote>&ldquo;Probably in 2025, we at Meta&hellip; will have an AI that can effectively be a sort of midlevel engineer that you have at your company that can write code.&rdquo;</blockquote>
-        <figcaption>
-          <strong>Mark Zuckerberg</strong>, Chief Executive Officer, Meta Platforms
-          <span class="source">The Joe Rogan Experience, January 2025</span>
-        </figcaption>
-      </figure>
-      <figure class="quote">
-        <blockquote>&ldquo;There will come a point where no job is needed. You can have a job if you want a job&hellip; but the AI will be able to do everything.&rdquo;</blockquote>
-        <figcaption>
-          <strong>Elon Musk</strong>, Chief Executive Officer, xAI
-          <span class="source">UK AI Safety Summit, November 2023</span>
-        </figcaption>
-      </figure>
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">Leadership</h2>
+        <p class="dek">Statements from the chief executives of member organizations, on the record.</p>
+      </div>
+      <div class="statements">
+        <figure class="statement featured">
+          <blockquote>&ldquo;We are now confident we know how to build AGI as we have traditionally understood it.&rdquo;</blockquote>
+          <figcaption><span class="who">Sam Altman</span>, <span class="title">Chief Executive Officer, OpenAI</span><span class="src">&ldquo;Reflections,&rdquo; January 2025<a class="fn" href="#n17" aria-label="Note 17">17</a></span></figcaption>
+        </figure>
+        <figure class="statement">
+          <blockquote>&ldquo;In terms of pure intelligence, it is smarter than a Nobel Prize winner across most relevant fields&hellip; We could summarize this as a &lsquo;country of geniuses in a datacenter.&rsquo;&rdquo;</blockquote>
+          <figcaption><span class="who">Dario Amodei</span>, <span class="title">Chief Executive Officer, Anthropic</span><span class="src">&ldquo;Machines of Loving Grace,&rdquo; October 2024<a class="fn" href="#n18" aria-label="Note 18">18</a></span></figcaption>
+        </figure>
+        <figure class="statement">
+          <blockquote>&ldquo;I think over the next five to 10 years, a lot of those capabilities will start coming to the fore and we&rsquo;ll start moving towards what we call artificial general intelligence.&rdquo;</blockquote>
+          <figcaption><span class="who">Demis Hassabis</span>, <span class="title">Chief Executive Officer, Google DeepMind</span><span class="src">Briefing at DeepMind&rsquo;s London offices, March 2025<a class="fn" href="#n19" aria-label="Note 19">19</a></span></figcaption>
+        </figure>
+        <figure class="statement">
+          <blockquote>&ldquo;Over the last few months we have begun to see glimpses of our AI systems improving themselves. The improvement is slow for now, but undeniable. Developing superintelligence is now in sight.&rdquo;</blockquote>
+          <figcaption><span class="who">Mark Zuckerberg</span>, <span class="title">Chief Executive Officer, Meta</span><span class="src">&ldquo;Personal Superintelligence,&rdquo; July 2025<a class="fn" href="#n9" aria-label="Note 9">9</a></span></figcaption>
+        </figure>
+        <figure class="statement">
+          <blockquote>&ldquo;There will come a point where no job is needed. You can have a job if you want to have a job for personal satisfaction, but the AI will be able to do everything.&rdquo;</blockquote>
+          <figcaption><span class="who">Elon Musk</span>, <span class="title">Founder, xAI</span><span class="src">In conversation with Rishi Sunak, AI Safety Summit, November 2023<a class="fn" href="#n20" aria-label="Note 20">20</a></span></figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
-  <section class="section" id="progress">
-    <div class="section-hdr">
-      <h2>Progress</h2>
-      <h3>By <em>the numbers</em>.</h3>
+  <section class="section" id="outlook">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">Outlook</h2>
+        <p class="dek">Guidance from member leadership on what the Project&rsquo;s success would mean for employment.</p>
+      </div>
+      <div class="guidance">
+        <div class="guide">
+          <p class="guide-metric">Entry-level white-collar jobs eliminated</p>
+          <p class="guide-value">Half</p>
+          <p class="guide-quote">&ldquo;AI could wipe out half of all entry-level white-collar jobs&rdquo;</p>
+          <p class="guide-src">Axios, reporting an interview with Dario Amodei, Anthropic, May 2025<a class="fn" href="#n21" aria-label="Note 21">21</a></p>
+        </div>
+        <div class="guide">
+          <p class="guide-metric">Unemployment, within one to five years</p>
+          <p class="guide-value">10&ndash;20%</p>
+          <p class="guide-quote">AI could &ldquo;spike unemployment to 10-20% in the next one to five years&rdquo;</p>
+          <p class="guide-src">Same interview, as reported by Axios<a class="fn" href="#n21" aria-label="Note 21">21</a></p>
+        </div>
+        <div class="guide">
+          <p class="guide-metric">Human employment, benign scenario</p>
+          <p class="guide-value">Probably none</p>
+          <p class="guide-quote">&ldquo;In a benign scenario, probably none of us will have a job.&rdquo;</p>
+          <p class="guide-src">Elon Musk, xAI, VivaTech, May 2024<a class="fn" href="#n22" aria-label="Note 22">22</a></p>
+        </div>
+        <div class="guide">
+          <p class="guide-metric">Occupations affected</p>
+          <p class="guide-value">Whole classes</p>
+          <p class="guide-quote">&ldquo;There will be very hard parts like whole classes of jobs going away&rdquo;</p>
+          <p class="guide-src">Sam Altman, OpenAI, &ldquo;The Gentle Singularity,&rdquo; June 2025<a class="fn" href="#n23" aria-label="Note 23">23</a></p>
+        </div>
+      </div>
     </div>
-    <div class="stats-grid">
-      <div class="stat">
-        <span class="stat-value">$500B+</span>
-        <span class="stat-label">Committed U.S. infrastructure investment under the Stargate initiative</span>
-        <span class="stat-source">Announced January 2025</span>
+  </section>
+
+  <section class="section risk" id="risk-factors">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">Risk factors</h2>
+        <p class="dek">An excerpt from the Project&rsquo;s annual report.</p>
       </div>
-      <div class="stat">
-        <span class="stat-value">~4&times;</span>
-        <span class="stat-label">Annual growth in frontier training compute</span>
-        <span class="stat-source">Epoch AI, 2024</span>
+      <article class="filing" aria-label="Excerpt: Item 1A, Risk Factors">
+        <div class="filing-head">The Obsoleting Project<br>Annual Report 2026<br>Part I</div>
+        <h3>Item 1A. Risk Factors</h3>
+        <p>An investment in the Project&rsquo;s objective involves a high degree of risk. You should carefully consider the risks described below, together with all of the other information on this site. If any of the following risks actually occurs, our business, the global economy and the human species could be materially and adversely affected.</p>
+        <p class="filing-sub">Risks Related to Our Products</p>
+        <h4>Our products could cause human extinction.</h4>
+        <p>In May 2023, the chief executives of OpenAI, Anthropic and Google DeepMind signed a public statement declaring: &ldquo;Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war.&rdquo;<a class="fn" href="#n24" aria-label="Note 24">24</a></p>
+        <h4>We do not currently know how to control the systems we intend to build.</h4>
+        <p>OpenAI has disclosed that superintelligence &ldquo;could lead to the disempowerment of humanity or even human extinction,&rdquo; and that &ldquo;[c]urrently, we don&rsquo;t have a solution for steering or controlling a potentially superintelligent AI, and preventing it from going rogue.&rdquo;<a class="fn" href="#n25" aria-label="Note 25">25</a></p>
+        <h4>Our leadership&rsquo;s own estimates of catastrophic outcomes are material.</h4>
+        <p>The chief executive of Anthropic has said: &ldquo;I think there&rsquo;s a 25% chance that things go really, really badly.&rdquo;<a class="fn" href="#n26" aria-label="Note 26">26</a> The founder of xAI has said there is &ldquo;some chance that it will end humanity,&rdquo; and put that chance at &ldquo;10% or 20% or something like that.&rdquo;<a class="fn" href="#n27" aria-label="Note 27">27</a></p>
+        <h4>Society may not be prepared for our products.</h4>
+        <p>&ldquo;Humanity is about to be handed almost unimaginable power, and it is deeply unclear whether our social, political, and technological systems possess the maturity to wield it.&rdquo;<a class="fn" href="#n28" aria-label="Note 28">28</a></p>
+        <p class="filing-sub">Risks Related to Our Objective</p>
+        <h4>If we succeed, demand for human labor may decline substantially.</h4>
+        <p>See &ldquo;Outlook.&rdquo;</p>
+        <h4>Long-term results may differ materially from near-term results.</h4>
+        <p>In 2015, months before co-founding OpenAI, Sam Altman said that AI &ldquo;will probably, most likely, sort of lead to the end of the world. But in the meantime, there will be great companies created with serious machine learning.&rdquo;<a class="fn" href="#n29" aria-label="Note 29">29</a></p>
+        <p class="filing-page">17</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="history">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">Milestones</h2>
+        <p class="dek">Selected events in the Project&rsquo;s development.</p>
       </div>
-      <div class="stat">
-        <span class="stat-value">7&nbsp;mo.</span>
-        <span class="stat-label">Doubling period for the length of software tasks AI can complete autonomously</span>
-        <span class="stat-source">METR, 2025</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value">800M+</span>
-        <span class="stat-label">Weekly active users of a single member product</span>
-        <span class="stat-source">OpenAI, 2025</span>
-      </div>
+      <ol class="timeline">
+        <li><span class="yr">2010</span><span class="ev">DeepMind is founded in London.</span></li>
+        <li><span class="yr">2012</span><span class="ev">A neural network called AlexNet wins the ImageNet competition, beginning the deep-learning boom.</span></li>
+        <li><span class="yr">2014</span><span class="ev">Google acquires DeepMind.</span></li>
+        <li><span class="yr">2015</span><span class="ev">OpenAI is founded as a nonprofit, with the goal of advancing digital intelligence &ldquo;unconstrained by a need to generate financial return.&rdquo;<a class="fn" href="#n30" aria-label="Note 30">30</a></span></li>
+        <li><span class="yr">2017</span><span class="ev">Google researchers publish &ldquo;Attention Is All You Need,&rdquo; introducing the transformer architecture behind today&rsquo;s systems.</span></li>
+        <li><span class="yr">2018</span><span class="ev">The OpenAI Charter defines artificial general intelligence as &ldquo;highly autonomous systems that outperform humans at most economically valuable work.&rdquo;</span></li>
+        <li><span class="yr">2019</span><span class="ev">Microsoft invests $1 billion in OpenAI.</span></li>
+        <li><span class="yr">2021</span><span class="ev">Former OpenAI researchers found Anthropic.</span></li>
+        <li><span class="yr">2022</span><span class="ev">OpenAI releases ChatGPT.</span></li>
+        <li><span class="yr">2023</span><span class="ev">The chief executives of OpenAI, Anthropic and Google DeepMind sign a statement on the risk of extinction from AI. Elon Musk launches xAI.</span></li>
+        <li><span class="yr">2025</span><span class="ev">OpenAI, SoftBank, Oracle and MGX announce Stargate. Meta forms Meta Superintelligence Labs. OpenAI completes its conversion to a for-profit public benefit corporation controlled by its nonprofit foundation.</span></li>
+        <li><span class="yr">2026</span><span class="ev">OpenAI says it has secured 10 gigawatts of computing capacity, reaching a goal it had set for 2029.<a class="fn" href="#n31" aria-label="Note 31">31</a></span></li>
+      </ol>
     </div>
   </section>
 
   <section class="section" id="contact">
-    <div class="section-hdr">
-      <h2>Contact</h2>
-      <h3>The Project does not <em>maintain external communications</em>.</h3>
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">Careers &amp; contact</h2>
+      </div>
+      <div class="desks">
+        <div class="desk">
+          <h3>Careers</h3>
+          <p>Member organizations are hiring in research and engineering. In 2025, the chief executive of OpenAI said a fellow member had offered his staff &ldquo;$100 million signing bonuses.&rdquo;<a class="fn" href="#n32" aria-label="Note 32">32</a></p>
+          <p>Candidates for all other positions are encouraged to review the Project&rsquo;s <a href="#outlook">Outlook</a>.</p>
+        </div>
+        <div class="desk">
+          <h3>Government relations</h3>
+          <p>The Project does not lobby as a single entity. Members and their executives support political committees directly, including Leading the Future, a super PAC network launched in 2025 with more than $100 million pledged by backers including OpenAI president Greg Brockman.<a class="fn" href="#n33" aria-label="Note 33">33</a></p>
+        </div>
+        <div class="desk">
+          <h3>Contact</h3>
+          <p>The Project does not maintain a central point of contact.</p>
+          <p>For investor relations, product questions, safety disclosures, employment inquiries, regulatory correspondence or press requests, please contact the relevant member organization directly.</p>
+        </div>
+      </div>
+
+      <p class="fls"><strong>Cautionary note regarding forward-looking statements.</strong> This site contains forward-looking statements, including statements about the development of artificial general intelligence and superintelligence, the automation of most economically valuable work, the timing of each, and the continued existence of the human species. Words such as &ldquo;confident,&rdquo; &ldquo;in sight,&rdquo; &ldquo;benign scenario&rdquo; and &ldquo;country of geniuses&rdquo; are intended to identify such statements. Actual results may differ materially from those expressed or implied. The Project undertakes no obligation to update any forward-looking statement, whether as a result of new information, future events or otherwise.</p>
     </div>
-    <div class="about-body">
-      <div>
-        <p style="font-size:13px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; font-family:var(--font-body); font-weight:500;">Inquiries</p>
+  </section>
+
+  <section class="editorial" id="editorial-note" aria-labelledby="editorial-title">
+    <div class="wrap">
+      <p class="editorial-label">Editorial note</p>
+      <h2 class="editorial-claim" id="editorial-title">The biggest companies in history are racing to build a machine that replaces human labor. The only surefire way they won&rsquo;t succeed is if we stop them.</h2>
+      <p class="editorial-body">There is no Obsoleting Project, Inc. It is the journalist Garrison Lovely&rsquo;s name for that race, from his book <em>Obsolete</em>. This site gives the race the website it would have if it were a single company. Every quotation on it is real, on the record, and sourced in the notes below.</p>
+
+      <div class="book">
+        <div class="book-cover">
+          <picture>
+            <source srcset="book-cover-transparent-760.webp" type="image/webp">
+            <img src="book-cover-transparent-760.png" alt="The cover of Obsolete by Garrison Lovely" width="760" height="937" loading="lazy" decoding="async">
+          </picture>
+        </div>
+        <div class="book-text">
+          <h3 class="book-title"><span class="book-wordmark" role="img" aria-label="Obsolete"></span></h3>
+          <p class="book-subtitle">The AI Industry&rsquo;s Trillion-Dollar Race to Replace Us&nbsp;&mdash; and How to Stop It</p>
+          <p class="book-meta">By Garrison Lovely &middot; OR Books &amp; Nation Books &middot; Out now</p>
+          <div class="book-actions">
+            <a class="btn red" href="https://www.obsoletebook.org/?utm_source=obsoletingproject&amp;utm_medium=editorial&amp;utm_campaign=launch#order">Get the book <span class="arr" aria-hidden="true">&rarr;</span></a>
+            <a class="btn line" href="https://www.obsoletebook.org/?utm_source=obsoletingproject&amp;utm_medium=editorial&amp;utm_campaign=launch">obsoletebook.org</a>
+          </div>
+        </div>
       </div>
-      <div>
-        <p>For investor relations, product questions, safety disclosures, employment inquiries, regulatory correspondence, journalistic requests, or other matters, please contact the relevant member firm directly.</p>
-        <p>The Obsoleting Project does not maintain a centralized point of contact.</p>
-      </div>
+
+      <p class="disclaimer">The Obsoleting Project is editorial commentary. It is not a real organization, and this site is not affiliated with, endorsed by, or connected to any company named on it. Company names identify the companies; quotations are reproduced from the public sources listed in the notes.</p>
+    </div>
+  </section>
+
+  <section class="notes" id="notes" aria-labelledby="notes-title">
+    <div class="wrap">
+      <h2 id="notes-title">Notes</h2>
+      <ol>
+        <li id="n1">OpenAI, &ldquo;OpenAI Charter,&rdquo; April 9, 2018: &ldquo;OpenAI&rsquo;s mission is to ensure that artificial general intelligence (AGI)&mdash;by which we mean highly autonomous systems that outperform humans at most economically valuable work&mdash;benefits all of humanity.&rdquo; <a href="https://openai.com/charter/" rel="noopener">openai.com/charter</a></li>
+        <li id="n2">Alphabet, Amazon, Meta and Microsoft, 2026 capital-expenditure guidance. Sherwood News, &ldquo;Alphabet, Amazon, Microsoft, and Meta plan more than $700 billion on capex this year,&rdquo; 2026, <a href="https://sherwood.news/tech/alphabet-amazon-microsoft-meta-plan-more-than-700-billion-on-capex-this-year/" rel="noopener">sherwood.news</a>. A Financial Times tally after first-quarter earnings put the total near $725 billion, up from about $410 billion in 2025.</li>
+        <li id="n3">OpenAI reported 1.2 billion weekly ChatGPT users at its DevDay conference, September 29, 2026. It reported 800 million in October 2025 and 900 million in February 2026: TechCrunch, &ldquo;ChatGPT reaches 900M weekly active users,&rdquo; February 27, 2026, <a href="https://techcrunch.com/2026/02/27/chatgpt-reaches-900m-weekly-active-users/" rel="noopener">techcrunch.com</a>.</li>
+        <li id="n4">Epoch AI, &ldquo;AI Trends&rdquo;: &ldquo;Training compute for frontier language models has been growing at 5&times; per year since 2020.&rdquo; <a href="https://epoch.ai/trends" rel="noopener">epoch.ai/trends</a></li>
+        <li id="n5">METR, &ldquo;Measuring AI Ability to Complete Long Tasks,&rdquo; March 19, 2025: the length of tasks AI agents can complete &ldquo;has been doubling approximately every 7 months for the last 6 years.&rdquo; <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" rel="noopener">metr.org</a>. METR&rsquo;s January 2026 update measures faster doubling since 2023: <a href="https://metr.org/blog/2026-1-29-time-horizon-1-1/" rel="noopener">metr.org</a>.</li>
+        <li id="n6">Google DeepMind, &ldquo;About&rdquo;: &ldquo;Our mission is to build AI responsibly to benefit humanity.&rdquo; <a href="https://deepmind.google/about/" rel="noopener">deepmind.google/about</a></li>
+        <li id="n7">Anthropic, &ldquo;Claude&rsquo;s Constitution&rdquo;: &ldquo;our mission is to ensure that the world safely makes the transition through transformative AI.&rdquo; <a href="https://www.anthropic.com/constitution" rel="noopener">www.anthropic.com/constitution</a></li>
+        <li id="n8">xAI&rsquo;s website at its launch, July 12, 2023: &ldquo;The goal of xAI is to understand the true nature of the universe.&rdquo; As reported by SmartCompany, <a href="https://www.smartcompany.com.au/technology/elon-musk-launches-xai-understand-universe/" rel="noopener">smartcompany.com.au</a>.</li>
+        <li id="n9">Mark Zuckerberg, &ldquo;Personal Superintelligence,&rdquo; July 30, 2025: &ldquo;Meta&rsquo;s vision is to bring personal superintelligence to everyone.&rdquo; <a href="https://www.meta.com/superintelligence/" rel="noopener">www.meta.com/superintelligence</a>. Meta announced Meta Superintelligence Labs on June 30, 2025.</li>
+        <li id="n10">OpenAI, &ldquo;The next chapter of the Microsoft&ndash;OpenAI partnership,&rdquo; October 28, 2025: Microsoft&rsquo;s investment in OpenAI Group PBC is valued at approximately $135 billion, roughly 27% on an as-converted diluted basis. <a href="https://openai.com/index/next-chapter-of-microsoft-openai-partnership/" rel="noopener">openai.com</a></li>
+        <li id="n11">Announced by Microsoft, NVIDIA and Anthropic, November 18, 2025: Microsoft committed up to $5 billion and NVIDIA up to $10 billion to Anthropic, which committed to buy $30 billion of Azure computing capacity.</li>
+        <li id="n12">CNBC, &ldquo;Google to invest up to $40 billion in Anthropic,&rdquo; April 24, 2026: $10 billion up front and $30 billion tied to milestones, on top of about $3 billion invested earlier. <a href="https://www.cnbc.com/2026/04/24/google-to-invest-up-to-40-billion-in-anthropic-as-search-giant-spreads-its-ai-bets.html" rel="noopener">cnbc.com</a></li>
+        <li id="n13">CNBC, &ldquo;Amazon to invest up to $25 billion in Anthropic,&rdquo; April 20, 2026: $5 billion up front and $20 billion tied to milestones; Anthropic committed more than $100 billion to Amazon Web Services over ten years. <a href="https://www.cnbc.com/2026/04/20/amazon-invest-up-to-25-billion-in-anthropic-part-of-ai-infrastructure.html" rel="noopener">cnbc.com</a></li>
+        <li id="n14">NVIDIA committed up to $10 billion to Anthropic on November 18, 2025. It signed a letter of intent to invest up to $100 billion in OpenAI on September 22, 2025, and was reported to have taken a stake of about $30 billion in OpenAI&rsquo;s $122 billion funding round, which closed March 31, 2026: CNBC, <a href="https://www.cnbc.com/2026/03/31/openai-funding-round-ipo.html" rel="noopener">cnbc.com</a>.</li>
+        <li id="n15">The Wall Street Journal, September 10, 2025, reporting a contract of about $300 billion over roughly five years, beginning in 2027.</li>
+        <li id="n16">OpenAI, &ldquo;Announcing The Stargate Project,&rdquo; January 21, 2025: &ldquo;The Stargate Project is a new company which intends to invest $500 billion over the next four years building new AI infrastructure for OpenAI in the United States.&rdquo; SoftBank has financial responsibility, OpenAI operational responsibility; Masayoshi Son is chairman. <a href="https://openai.com/index/announcing-the-stargate-project/" rel="noopener">openai.com</a></li>
+        <li id="n17">Sam Altman, &ldquo;Reflections,&rdquo; January 2025. <a href="https://blog.samaltman.com/reflections" rel="noopener">blog.samaltman.com/reflections</a></li>
+        <li id="n18">Dario Amodei, &ldquo;Machines of Loving Grace,&rdquo; October 2024, defining what he calls &ldquo;powerful AI.&rdquo; <a href="https://darioamodei.com/essay/machines-of-loving-grace" rel="noopener">darioamodei.com</a></li>
+        <li id="n19">Demis Hassabis at a briefing in DeepMind&rsquo;s London offices, March 17, 2025, as reported by CNBC. Syndicated by NBC News, <a href="https://www.nbcnews.com/business/business-news/ai-can-match-humans-task-will-five-10-years-google-deepmind-ceo-says-rcna196771" rel="noopener">nbcnews.com</a>.</li>
+        <li id="n20">Elon Musk in conversation with Rishi Sunak, Lancaster House, London, November 2, 2023, as transcribed by TIME. Other outlets&rsquo; transcriptions differ slightly. <a href="https://time.com/6331056/rishi-sunak-elon-musk-ai/" rel="noopener">time.com</a></li>
+        <li id="n21">Jim VandeHei and Mike Allen, &ldquo;Behind the Curtain: A white-collar bloodbath,&rdquo; Axios, May 28, 2025. The quoted words are Axios&rsquo;s summary of what Dario Amodei told them in an interview. <a href="https://www.axios.com/2025/05/28/ai-jobs-white-collar-unemployment-anthropic" rel="noopener">axios.com</a></li>
+        <li id="n22">Elon Musk, speaking by video at VivaTech, Paris, May 23, 2024, as reported by CNN. <a href="https://edition.cnn.com/2024/05/23/tech/elon-musk-ai-your-job/index.html" rel="noopener">cnn.com</a></li>
+        <li id="n23">Sam Altman, &ldquo;The Gentle Singularity,&rdquo; June 10, 2025. <a href="https://blog.samaltman.com/the-gentle-singularity" rel="noopener">blog.samaltman.com/the-gentle-singularity</a></li>
+        <li id="n24">Center for AI Safety, &ldquo;Statement on AI Risk,&rdquo; May 30, 2023. Signatories include Sam Altman, Dario Amodei and Demis Hassabis. <a href="https://www.safe.ai/work/statement-on-ai-risk" rel="noopener">safe.ai</a></li>
+        <li id="n25">Jan Leike and Ilya Sutskever, &ldquo;Introducing Superalignment,&rdquo; OpenAI, July 5, 2023. <a href="https://openai.com/index/introducing-superalignment/" rel="noopener">openai.com</a></li>
+        <li id="n26">Dario Amodei at the Axios AI+ DC Summit, September 17, 2025. He put the chance that things go &ldquo;really, really well&rdquo; at 75%. <a href="https://www.axios.com/2025/09/17/anthropic-dario-amodei-p-doom-25-percent" rel="noopener">axios.com</a></li>
+        <li id="n27">Elon Musk, &ldquo;The Great AI Debate,&rdquo; Abundance Summit, March 2024: &ldquo;I think there&rsquo;s some chance that it will end humanity. I probably agree with Geoffrey Hinton, that it&rsquo;s about, 10% or 20% or something like that.&rdquo; As reported by Business Insider, <a href="https://businessinsider.nl/elon-musk-says-there-could-be-a-20-chance-ai-destroys-humanity-but-we-should-do-it-anyway/" rel="noopener">businessinsider.nl</a>.</li>
+        <li id="n28">Dario Amodei, chief executive of Anthropic, &ldquo;The Adolescence of Technology,&rdquo; January 2026. <a href="https://darioamodei.com/essay/the-adolescence-of-technology" rel="noopener">darioamodei.com</a></li>
+        <li id="n29">Sam Altman, then president of Y Combinator, in a fireside chat at Airbnb&rsquo;s OpenAir conference, June 2015. Published transcriptions vary slightly. OpenAI was announced in December 2015. Tom&rsquo;s Guide, <a href="https://www.tomsguide.com/ai/i-think-ai-will-probably-most-likely-lead-to-the-end-of-the-world-everyone-is-sharing-sam-altmans-doomsday-quote-but-almost-no-one-notices-the-date" rel="noopener">tomsguide.com</a>.</li>
+        <li id="n30">OpenAI, &ldquo;Introducing OpenAI,&rdquo; December 11, 2015: &ldquo;Our goal is to advance digital intelligence in the way that is most likely to benefit humanity as a whole, unconstrained by a need to generate financial return.&rdquo; <a href="https://openai.com/index/introducing-openai/" rel="noopener">openai.com</a></li>
+        <li id="n31">DatacenterDynamics, April 2026. The figure is contracted capacity; OpenAI ended 2025 with about 1.9 gigawatts in operation. <a href="https://www.datacenterdynamics.com/en/news/openai-claims-to-have-secured-10gw-of-ai-infrastructure-capacity-ahead-of-2029-target/" rel="noopener">datacenterdynamics.com</a></li>
+        <li id="n32">Sam Altman on the Uncapped podcast, June 2025, describing offers from Meta to OpenAI staff, as reported by CNN. <a href="https://edition.cnn.com/2025/06/18/tech/meta-openai-sam-altman-100-million" rel="noopener">cnn.com</a></li>
+        <li id="n33">SiliconANGLE, &ldquo;Silicon Valley AI leaders launch $100M Leading the Future super PAC,&rdquo; August 25, 2025. Backers also include Andreessen Horowitz, Joe Lonsdale and Ron Conway. <a href="https://siliconangle.com/2025/08/25/silicon-valley-ai-leaders-launch-100m-leading-future-super-pac/" rel="noopener">siliconangle.com</a></li>
+      </ol>
     </div>
   </section>
 
 </main>
 
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <span class="brand-mark">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
-          <circle cx="35" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="4"/>
-          <circle cx="63" cy="50" r="24" fill="currentColor"/>
-        </svg>
-      </span>
-      <span class="footer-brand-text">The Obsoleting Project</span>
-    </div>
-    <div>
-      <p class="disclaimer"><strong>Editorial notice.</strong> &ldquo;The Obsoleting Project&rdquo; is a term coined by the journalist Garrison Lovely in <em><a href="https://obsoletebook.org" target="_blank" rel="noopener">Obsolete: The AI Industry&rsquo;s Trillion Dollar Race to Replace Us &mdash; and How to Stop It</a></em> (OR Books + The Nation, September 29, 2026). This site is a work of editorial commentary. It is not affiliated with, endorsed by, or officially connected to any named company. All quotations are attributed to their original on-the-record sources.</p>
-      <p class="copyright">&copy; 2026 &middot; <a href="https://obsoletebook.org" target="_blank" rel="noopener">obsoletebook.org</a></p>
-    </div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <a class="brand" href="#top" aria-label="The Obsoleting Project, top of page">
+      <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="35" cy="50" r="22" fill="none" stroke="currentColor" stroke-width="4"/>
+        <circle cx="35" cy="50" r="24" fill="currentColor"/>
+      </svg>
+      <span class="wordmark">The Obsoleting Project</span>
+    </a>
+    <ul class="footer-links">
+      <li><a href="#notes">Notes</a></li>
+      <li><a href="/old/">Previous site</a></li>
+      <li><a href="https://www.obsoletebook.org/?utm_source=obsoletingproject&amp;utm_medium=footer&amp;utm_campaign=launch">obsoletebook.org</a></li>
+      <li>&copy; 2026</li>
+    </ul>
   </div>
 </footer>
 
+<script>
+  // Mobile menu
+  (function () {
+    var nav = document.querySelector('.site-nav');
+    var btn = nav.querySelector('.nav-toggle');
+    function set(open) {
+      nav.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = open ? 'Close' : 'Menu';
+    }
+    btn.addEventListener('click', function () { set(!nav.classList.contains('open')); });
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  })();
+
+  // Header mark: the disc covers the ring as the page is read.
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var root = document.documentElement, ticking = false;
+    function update() {
+      var max = root.scrollHeight - window.innerHeight;
+      root.style.setProperty('--p', max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)).toFixed(4) : 0);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
 </body>
 </html>

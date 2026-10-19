@@ -54,14 +54,18 @@ jobs:
         run: rsync -a --exclude .git --exclude .github --exclude '*.md' --exclude netlify.toml ./ "$RUNNER_TEMP/site/"
       - name: Deploy
         run: npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/site" --project-name="$PROJECT" --branch="$PROD_BRANCH" --commit-hash="$GITHUB_SHA" --commit-dirty=true
-      - name: Verify the live domain serves this commit's homepage
+      - name: Verify the URLs visitors open serve this commit's homepage
         run: |
-          marker=$(grep -o '<title>[^<]*</title>' index.html | head -1)
+          # Plain URLs on purpose (no cache-busting query): this is what Garrison and visitors load.
           expected=$(sha256sum index.html | cut -d' ' -f1)
-          for i in $(seq 1 20); do
-            got=$(curl -sS "https://obsoletingproject.com/?deploycheck=$GITHUB_SHA-$i" | sha256sum | cut -d' ' -f1)
-            [ "$got" = "$expected" ] && { echo "Live: obsoletingproject.com matches $GITHUB_SHA"; exit 0; }
-            sleep 6
+          for i in $(seq 1 30); do
+            ok=1
+            for u in https://obsoletingproject.com/ https://www.obsoletingproject.com/; do
+              got=$(curl -sSL -m 20 "$u" | sha256sum | cut -d' ' -f1)
+              [ "$got" = "$expected" ] || ok=0
+            done
+            [ $ok = 1 ] && { echo "Live: obsoletingproject.com and www match $GITHUB_SHA"; exit 0; }
+            sleep 10
           done
-          echo "::error::obsoletingproject.com does not match index.html at $GITHUB_SHA after deploy."
+          echo "::error::obsoletingproject.com still serves something other than index.html at $GITHUB_SHA after 5 minutes."
           exit 1

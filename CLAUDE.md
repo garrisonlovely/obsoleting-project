@@ -3,7 +3,8 @@
 ## How this site deploys (read before saying anything is "live")
 
 - **Production is Cloudflare Pages, not Netlify.** The domain's DNS is on Cloudflare and points at the Pages project `obsoletingproject` (`obsoletingproject.pages.dev`).
-- `.github/workflows/deploy-cloudflare-pages.yml` uploads `main` to that project on every push. Its last step fetches obsoletingproject.com and fails unless the live homepage matches `index.html` at that commit. So a green run means the site is live; anything else means it is not.
+- `.github/workflows/deploy-cloudflare-pages.yml` uploads `main` to that project on every push. Its last step fetches the plain URLs (https://obsoletingproject.com/ and www) with no cache-busting query and fails unless the live homepage matches `index.html` at that commit. So a green run means the site is live; anything else means it is not.
+- To check the live site yourself at any time, run the `Check live site` workflow (`check-live.yml`, workflow_dispatch) and read its log. This sandbox can't reach the site directly; GitHub Actions can. Test what a visitor loads, not a `?query` variant.
 - It uses the repository secret `CLOUDFLARE_API_TOKEN` (Account → Cloudflare Pages → Edit). The secret already exists; don't ask Garrison for it again unless a run says it's missing or rejected.
 - **Netlify** (site `obsoletingproject`) builds deploy previews for pull requests (`deploy-preview-<N>--obsoletingproject.netlify.app`) and serves obsoletingproject.netlify.app. Nothing on Netlify reaches the real domain.
 - From April to October 2026, nothing pushed here reached the live site (the Pages project was a one-off manual upload). If you find something like that again on Garrison's other sites, check DNS and the serving host first.

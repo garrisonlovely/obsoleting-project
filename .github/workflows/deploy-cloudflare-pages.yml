@@ -40,7 +40,9 @@ jobs:
             r=$(api /memberships); echo "/memberships: $(echo "$r" | summary)"
             ACCOUNT_ID=$(echo "$r" | jq -r '.result[0].account.id // empty')
           fi
-          [ -n "$ACCOUNT_ID" ] || { echo "::error::Could not determine the Cloudflare account ID from this token."; exit 1; }
+          # A Pages-only token can't list its account, so fall back to Garrison's Cloudflare
+          # account ID (not a secret; approved by Garrison for this deploy).
+          ACCOUNT_ID="${ACCOUNT_ID:-fd4be337c12518eab8dd73b47dd8b536}"
           echo "account token verify: $(api "/accounts/$ACCOUNT_ID/tokens/verify" | summary)"
           r=$(api "/accounts/$ACCOUNT_ID/pages/projects/$PROJECT"); echo "pages project: $(echo "$r" | summary)"
           BRANCH=$(echo "$r" | jq -r '.result.production_branch // empty')

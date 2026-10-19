@@ -1,0 +1,33 @@
+name: diag-live-site
+on:
+  push:
+    branches: [diag-live-site]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe live site, Netlify origin and DNS
+        run: |
+          echo "### DNS"
+          for n in obsoletingproject.com www.obsoletingproject.com; do
+            echo "-- $n NS: $(dig +short NS $n | tr '\n' ' ')"
+            echo "-- $n A: $(dig +short A $n | tr '\n' ' ')"
+            echo "-- $n CNAME: $(dig +short CNAME $n | tr '\n' ' ')"
+          done
+          probe() {
+            echo; echo "### $1"
+            curl -sS -m 25 -D /tmp/h -o /tmp/b "$1" ${2:+--resolve "$2"} || echo "curl failed"
+            grep -iE '^(HTTP|server|location|cache-control|cf-cache-status|age|x-nf-request-id|cache-status|last-modified|etag|x-github-request-id|x-served-by|via)' /tmp/h
+            echo "title: $(grep -o '<title>[^<]*</title>' /tmp/b | head -1)"
+            echo "new-site markers (Risk factors / Our mission): $(grep -c 'Risk factors' /tmp/b) / $(grep -c 'Our mission' /tmp/b)"
+            echo "old-site marker (Fraunces): $(grep -c 'Fraunces' /tmp/b)"
+          }
+          probe https://obsoletingproject.com/
+          probe "https://obsoletingproject.com/?nocache=$RANDOM$RANDOM"
+          probe https://obsoletingproject.com/old/
+          probe https://www.obsoletingproject.com/
+          probe http://obsoletingproject.com/
+          probe https://obsoletingproject.netlify.app/
+          probe https://main--obsoletingproject.netlify.app/
+          probe https://obsoletingproject.com/ obsoletingproject.com:443:75.2.60.5
+          probe https://garrisonlovely.github.io/obsoleting-project/

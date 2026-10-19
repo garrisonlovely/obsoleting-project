@@ -1,0 +1,21 @@
+# Fetches the real URLs a visitor would open and says whether each matches main.
+# Run it any time with workflow_dispatch; Claude uses it to check the live site.
+name: Check live site
+on:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Fetch live URLs and compare with main
+        run: |
+          set +e
+          want=$(sha256sum index.html | cut -d' ' -f1)
+          for u in https://obsoletingproject.com/ https://obsoletingproject.com https://www.obsoletingproject.com/ http://obsoletingproject.com/ "https://obsoletingproject.com/?check=$GITHUB_RUN_ID" https://obsoletingproject.pages.dev/; do
+            curl -sSL -m 25 -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36" -D /tmp/h -o /tmp/b "$u"
+            got=$(sha256sum /tmp/b | cut -d' ' -f1)
+            echo "== $u"
+            grep -iE '^(HTTP|cf-cache-status|age|cache-control|last-modified|location|expires)' /tmp/h | tr -d '\r'
+            echo "matches main: $([ "$got" = "$want" ] && echo YES || echo NO) | new-site marker: $(grep -c 'Risk factors' /tmp/b) | old-site marker: $(grep -c Fraunces /tmp/b)"
+          done
